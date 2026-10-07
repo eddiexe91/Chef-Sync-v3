@@ -1,0 +1,28 @@
+{
+  "collections": {
+    "users": {
+      "documents": {
+        "{userId}": {
+          "fields": {
+            "spreadsheetId": { "type": "string" },
+            "lastSync": { "type": "timestamp" }
+          },
+          "collections": {
+            "logs": {
+              "documents": {
+                "{logId}": {
+                  "fields": {
+                    "action": { "type": "string" },
+                    "status": { "type": "string" },
+                    "message": { "type": "string" },
+                    "timestamp": { "type": "timestamp" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

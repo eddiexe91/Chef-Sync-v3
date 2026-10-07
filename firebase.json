@@ -1,0 +1,8 @@
+{
+  "firestore": [
+    {
+      "database": "ai-studio-android-chefsync-60ef7e88-f2ad-4618-930a-26be9483cc8f",
+      "rules": "firestore.rules"
+    }
+  ]
+}

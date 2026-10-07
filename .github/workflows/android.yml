@@ -1,0 +1,44 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: List files for debug
+      run: ls -R
+
+    - name: Build with Gradle
+      run: |
+        # Create a dummy .env with the required key to satisfy the secrets plugin
+        echo "GEMINI_API_KEY=dummy" > .env
+        
+        # Create a dummy google-services.json if it doesn't exist (it is gitignored)
+        if [ ! -f app/google-services.json ]; then
+          echo '{"project_info":{"project_number":"0","project_id":"dummy","storage_bucket":"dummy"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.aistudio.chefsync.xvqp"}},"oauth_client":[],"api_key":[{"current_key":"dummy"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}],"configuration_version":"1"}' > app/google-services.json
+        fi
+        
+        # Build the APK skipping linting to speed up and avoid minor failures
+        gradle clean assembleDebug -x lint --stacktrace
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ChefSync-v1.0-Debug
+        path: app/build/outputs/apk/debug/*.apk
