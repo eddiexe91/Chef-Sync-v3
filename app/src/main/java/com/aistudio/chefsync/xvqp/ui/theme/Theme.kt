@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.ui.theme
+package com.aistudio.chefsync.xvqp.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

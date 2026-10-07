@@ -1,10 +1,10 @@
-package com.aistudio.chefsync
+package com.aistudio.chefsync.xvqp
 
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import com.aistudio.chefsync.data.local.AppDatabase
+import com.aistudio.chefsync.xvqp.data.local.AppDatabase
 
 class ChefSyncApp : Application() {
     val database by lazy { AppDatabase.getDatabase(this) }

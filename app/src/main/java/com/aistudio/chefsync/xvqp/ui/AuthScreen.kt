@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.ui
+package com.aistudio.chefsync.xvqp.ui
 
 import android.app.Activity
 import android.content.Context
@@ -15,7 +15,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
-import com.aistudio.chefsync.R
+import com.aistudio.chefsync.xvqp.R
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL

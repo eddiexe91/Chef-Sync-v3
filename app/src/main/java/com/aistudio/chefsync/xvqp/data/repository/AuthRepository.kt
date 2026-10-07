@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.data.repository
+package com.aistudio.chefsync.xvqp.data.repository
 
 import android.content.Context
 import androidx.credentials.CredentialManager
@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import com.aistudio.chefsync.BuildConfig
+import com.aistudio.chefsync.xvqp.BuildConfig
 
 class AuthRepository(private val context: Context) {
     private val auth = FirebaseAuth.getInstance()

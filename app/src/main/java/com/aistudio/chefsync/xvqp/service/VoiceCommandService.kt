@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.service
+package com.aistudio.chefsync.xvqp.service
 
 import android.app.Notification
 import android.app.Service
@@ -10,11 +10,11 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import androidx.core.app.NotificationCompat
-import com.aistudio.chefsync.R
-import com.aistudio.chefsync.ChefSyncApp
-import com.aistudio.chefsync.data.repository.ProductRepository
-import com.aistudio.chefsync.data.repository.CloudSyncRepository
-import com.aistudio.chefsync.data.local.Waste
+import com.aistudio.chefsync.xvqp.R
+import com.aistudio.chefsync.xvqp.ChefSyncApp
+import com.aistudio.chefsync.xvqp.data.repository.ProductRepository
+import com.aistudio.chefsync.xvqp.data.repository.CloudSyncRepository
+import com.aistudio.chefsync.xvqp.data.local.Waste
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

@@ -1,7 +1,7 @@
-package com.aistudio.chefsync.data.repository
+package com.aistudio.chefsync.xvqp.data.repository
 
 import android.content.Context
-import com.aistudio.chefsync.R
+import com.aistudio.chefsync.xvqp.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue

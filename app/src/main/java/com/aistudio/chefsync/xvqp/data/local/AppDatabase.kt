@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.data.local
+package com.aistudio.chefsync.xvqp.data.local
 
 import android.content.Context
 import androidx.room.Database

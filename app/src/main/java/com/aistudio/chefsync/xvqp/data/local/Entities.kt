@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.data.local
+package com.aistudio.chefsync.xvqp.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

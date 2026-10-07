@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.data.remote
+package com.aistudio.chefsync.xvqp.data.remote
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject

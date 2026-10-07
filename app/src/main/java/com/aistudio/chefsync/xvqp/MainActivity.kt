@@ -1,4 +1,4 @@
-package com.aistudio.chefsync
+package com.aistudio.chefsync.xvqp
 
 import android.Manifest
 import android.content.Intent
@@ -23,14 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.aistudio.chefsync.data.local.Product
-import com.aistudio.chefsync.data.local.SyncLog
-import com.aistudio.chefsync.data.repository.CloudSyncRepository
-import com.aistudio.chefsync.data.repository.ProductRepository
-import com.aistudio.chefsync.service.VoiceCommandService
-import com.aistudio.chefsync.ui.AuthScreen
-import com.aistudio.chefsync.ui.InventoryViewModel
-import com.aistudio.chefsync.ui.theme.ChefSyncTheme
+import com.aistudio.chefsync.xvqp.data.local.Product
+import com.aistudio.chefsync.xvqp.data.local.SyncLog
+import com.aistudio.chefsync.xvqp.data.repository.CloudSyncRepository
+import com.aistudio.chefsync.xvqp.data.repository.ProductRepository
+import com.aistudio.chefsync.xvqp.service.VoiceCommandService
+import com.aistudio.chefsync.xvqp.ui.AuthScreen
+import com.aistudio.chefsync.xvqp.ui.InventoryViewModel
+import com.aistudio.chefsync.xvqp.ui.theme.ChefSyncTheme
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {

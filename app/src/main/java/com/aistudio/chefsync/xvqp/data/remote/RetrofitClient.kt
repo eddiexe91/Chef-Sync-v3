@@ -1,6 +1,6 @@
-package com.aistudio.chefsync.data.remote
+package com.aistudio.chefsync.xvqp.data.remote
 
-import com.aistudio.chefsync.BuildConfig
+import com.aistudio.chefsync.xvqp.BuildConfig
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
