@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-  namespace = "com.aistudio.chefsync.xvqp"
+  namespace = "com.aistudio.chefsync"
   compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.aistudio.chefsync.xvqp"
+        applicationId = "com.aistudio.chefsync"
         minSdk = 24
     targetSdk = 35
     versionCode = 1

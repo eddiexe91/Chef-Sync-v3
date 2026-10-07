@@ -1,11 +1,9 @@
-package com.aistudio.chefsync.xvqp.data.remote
+package com.aistudio.chefsync.data.remote
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
-// --- Gemini API ---
 @Serializable
 data class GenerateContentRequest(
     val contents: List<Content>,
@@ -41,7 +39,6 @@ interface GeminiApiService {
     ): GenerateContentResponse
 }
 
-// --- Google Sheets API ---
 @Serializable
 data class ValueRange(
     val range: String? = null,
@@ -59,15 +56,6 @@ interface SheetsApiService {
 
     @POST("{spreadsheetId}/values/{range}:append")
     suspend fun appendValues(
-        @Header("Authorization") authHeader: String,
-        @Path("spreadsheetId") spreadsheetId: String,
-        @Path("range") range: String,
-        @Query("valueInputOption") valueInputOption: String = "USER_ENTERED",
-        @Body values: ValueRange
-    ): ResponseBody
-
-    @PUT("{spreadsheetId}/values/{range}")
-    suspend fun updateValues(
         @Header("Authorization") authHeader: String,
         @Path("spreadsheetId") spreadsheetId: String,
         @Path("range") range: String,

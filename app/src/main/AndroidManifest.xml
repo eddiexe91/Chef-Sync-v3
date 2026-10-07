@@ -19,14 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
-        android:name="com.aistudio.chefsync.xvqp.ChefSyncApp">
+        android:name="com.aistudio.chefsync.ChefSyncApp">
         <service
-            android:name="com.aistudio.chefsync.xvqp.service.VoiceCommandService"
+            android:name="com.aistudio.chefsync.service.VoiceCommandService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="microphone" />
         <activity
-            android:name="com.aistudio.chefsync.xvqp.MainActivity"
+            android:name="com.aistudio.chefsync.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyApplication">

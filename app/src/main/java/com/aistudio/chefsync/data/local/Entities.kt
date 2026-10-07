@@ -1,11 +1,11 @@
-package com.aistudio.chefsync.xvqp.data.local
+package com.aistudio.chefsync.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "products")
 data class Product(
-    @PrimaryKey val id: String, // Likely the row index or a unique name
+    @PrimaryKey val id: String,
     val name: String,
     val quantity: Double,
     val unit: String,
@@ -28,7 +28,7 @@ data class Waste(
 data class SyncLog(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val action: String,
-    val status: String, // SUCCESS, ERROR
+    val status: String,
     val message: String,
     val timestamp: Long = System.currentTimeMillis()
 )

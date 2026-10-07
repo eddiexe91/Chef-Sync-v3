@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.xvqp.ui
+package com.aistudio.chefsync.ui
 
 import android.app.Activity
 import android.content.Context
@@ -15,7 +15,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
-import com.aistudio.chefsync.xvqp.R
+import com.aistudio.chefsync.R
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
@@ -33,74 +33,29 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
     var errorMsg by remember { mutableStateOf<String?>(null) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            "Bienvenido a ChefSync",
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            "Gestiona tu cocina con la voz",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Text("Bienvenido a ChefSync", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(32.dp))
-
         if (isLoading) {
             CircularProgressIndicator()
         } else {
-            Button(
-                onClick = {
-                    isLoading = true
-                    errorMsg = null
-                    onGoogleSignInClicked(
-                        context,
-                        onAuthSuccess = {
-                            isLoading = false
-                            onAuthSuccess()
-                        },
-                        onAuthError = {
-                            isLoading = false
-                            errorMsg = it
-                        },
-                        scope = scope
-                    )
-                }
-            ) {
-                Text("Iniciar sesión con Google")
-            }
+            Button(onClick = {
+                isLoading = true
+                onGoogleSignInClicked(context, onAuthSuccess = { isLoading = false; onAuthSuccess() }, onAuthError = { isLoading = false; errorMsg = it }, scope = scope)
+            }) { Text("Iniciar sesión con Google") }
         }
-
-        errorMsg?.let {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(it, color = MaterialTheme.colorScheme.error)
-        }
+        errorMsg?.let { Text(it, color = MaterialTheme.colorScheme.error) }
     }
 }
 
-fun onGoogleSignInClicked(
-    context: Context,
-    onAuthSuccess: () -> Unit,
-    onAuthError: (String) -> Unit,
-    scope: CoroutineScope
-) {
+fun onGoogleSignInClicked(context: Context, onAuthSuccess: () -> Unit, onAuthError: (String) -> Unit, scope: CoroutineScope) {
     val credentialManager = CredentialManager.create(context)
-    val clientId = try {
-        context.getString(R.string.default_web_client_id)
-    } catch (e: Exception) {
-        onAuthError("Error de configuración: no se encontró default_web_client_id")
-        return
-    }
-
+    val clientId = try { context.getString(R.string.default_web_client_id) } catch (e: Exception) { onAuthError("Config missing"); return }
     val signInOption = GetSignInWithGoogleOption.Builder(serverClientId = clientId).build()
     val request = GetCredentialRequest.Builder().addCredentialOption(signInOption).build()
-
     scope.launch {
         try {
             val result = credentialManager.getCredential(context as Activity, request)
@@ -110,15 +65,7 @@ fun onGoogleSignInClicked(
                 val authCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
                 FirebaseAuth.getInstance().signInWithCredential(authCredential).await()
                 onAuthSuccess()
-            } else {
-                onAuthError("Tipo de credencial inesperado")
             }
-        } catch (e: GetCredentialCancellationException) {
-            Log.w("Auth", "Cancelado: ${e.message}")
-            onAuthError("Inicio de sesión cancelado")
-        } catch (e: Exception) {
-            Log.e("Auth", "Fallo", e)
-            onAuthError(e.localizedMessage ?: "Error desconocido")
-        }
+        } catch (e: Exception) { onAuthError(e.message ?: "Error") }
     }
 }

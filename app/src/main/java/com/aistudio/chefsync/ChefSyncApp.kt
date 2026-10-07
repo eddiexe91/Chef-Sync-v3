@@ -1,16 +1,18 @@
-package com.aistudio.chefsync.xvqp
+package com.aistudio.chefsync
 
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import com.aistudio.chefsync.xvqp.data.local.AppDatabase
+import android.util.Log
+import com.aistudio.chefsync.data.local.AppDatabase
 
 class ChefSyncApp : Application() {
     val database by lazy { AppDatabase.getDatabase(this) }
 
     override fun onCreate() {
         super.onCreate()
+        Log.d("ChefSyncApp", "Application onCreate")
         createNotificationChannel()
     }
 
@@ -26,7 +28,6 @@ class ChefSyncApp : Application() {
                 getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
 
-            // Critical stock notifications
             val criticalName = "Alertas de Inventario"
             val criticalDescription = "Notificaciones de stock crítico"
             val criticalImportance = NotificationManager.IMPORTANCE_HIGH
