@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ChefSync</string>
+    <string name="default_web_client_id" translatable="false">612427151884-cqrr4j92t0pft10kb676vp67kmhvb659.apps.googleusercontent.com</string>
 </resources>
