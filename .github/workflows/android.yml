@@ -31,55 +31,7 @@ jobs:
         
         # Ensure google-services.json exists
         if [ ! -f app/google-services.json ]; then
-          cat << 'EOF' > app/google-services.json
-{
-  "project_info": {
-    "project_number": "612427151884",
-    "project_id": "gen-lang-client-0399272396",
-    "storage_bucket": "gen-lang-client-0399272396.firebasestorage.app"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:612427151884:android:3dba5921e2a88c4364cc29",
-        "android_client_info": {
-          "package_name": "com.aistudio.chefsync.xvqp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "612427151884-q59vkfd9o1dhn5mn7256lhdf3s7ofgr0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.aistudio.chefsync.xvqp",
-            "certificate_hash": "8c004b662c7102d83dafc5b22e9c7b47983fdca8"
-          }
-        },
-        {
-          "client_id": "612427151884-cqrr4j92t0pft10kb676vp67kmhvb659.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDOnfUpsJJNCOLb0YlzX17wp7sC-sQ1NH0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "612427151884-cqrr4j92t0pft10kb676vp67kmhvb659.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
-}
-EOF
+          echo '{"project_info":{"project_number":"612427151884","project_id":"gen-lang-client-0399272396","storage_bucket":"gen-lang-client-0399272396.firebasestorage.app"},"client":[{"client_info":{"mobilesdk_app_id":"1:612427151884:android:3dba5921e2a88c4364cc29","android_client_info":{"package_name":"com.aistudio.chefsync.xvqp"}},"oauth_client":[{"client_id":"612427151884-q59vkfd9o1dhn5mn7256lhdf3s7ofgr0.apps.googleusercontent.com","client_type":1,"android_info":{"package_name":"com.aistudio.chefsync.xvqp","certificate_hash":"8c004b662c7102d83dafc5b22e9c7b47983fdca8"}},{"client_id":"612427151884-cqrr4j92t0pft10kb676vp67kmhvb659.apps.googleusercontent.com","client_type":3}],"api_key":[{"current_key":"AIzaSyDOnfUpsJJNCOLb0YlzX17wp7sC-sQ1NH0"}],"services":{"appinvite_service":{"other_platform_oauth_client":[{"client_id":"612427151884-cqrr4j92t0pft10kb676vp67kmhvb659.apps.googleusercontent.com","client_type":3}]}}}],"configuration_version":"1"}' > app/google-services.json
         fi
 
         # Generate debug.keystore if missing (it is gitignored)
