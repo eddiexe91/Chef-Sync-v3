@@ -14,6 +14,15 @@ interface ProductDao {
     @Query("SELECT * FROM products WHERE name LIKE :name LIMIT 1")
     suspend fun getProductByName(name: String): Product?
 
+    @Query("SELECT * FROM products WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%' LIMIT 1")
+    suspend fun searchProductByName(query: String): Product?
+
+    @Query("SELECT COUNT(*) FROM products")
+    suspend fun getProductCount(): Int
+
+    @Query("DELETE FROM products")
+    suspend fun clearAllProducts()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProducts(products: List<Product>)
 
