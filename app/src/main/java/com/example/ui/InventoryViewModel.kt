@@ -1,11 +1,11 @@
-package com.aistudio.chefsync.ui
+package com.example.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aistudio.chefsync.data.local.Product
-import com.aistudio.chefsync.data.local.SyncLog
-import com.aistudio.chefsync.data.repository.CloudSyncRepository
-import com.aistudio.chefsync.data.repository.ProductRepository
+import com.example.data.local.Product
+import com.example.data.local.SyncLog
+import com.example.data.repository.CloudSyncRepository
+import com.example.data.repository.ProductRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn

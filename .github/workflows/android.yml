@@ -29,10 +29,13 @@ jobs:
         # Create a dummy .env with the required key to satisfy the secrets plugin
         echo "GEMINI_API_KEY=dummy" > .env
         
-        # Create a dummy google-services.json if it doesn't exist (it is gitignored)
-        if [ ! -f app/google-services.json ]; then
-          echo '{"project_info":{"project_number":"0","project_id":"dummy","storage_bucket":"dummy"},"client":[{"client_info":{"mobilesdk_app_id":"1:0:android:0","android_client_info":{"package_name":"com.aistudio.chefsync.xvqp"}},"oauth_client":[],"api_key":[{"current_key":"dummy"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}],"configuration_version":"1"}' > app/google-services.json
+        # Generate debug.keystore if missing (it is gitignored)
+        if [ ! -f debug.keystore ]; then
+          keytool -genkeypair -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
         fi
+
+        # Accept Android SDK licenses if sdkmanager is available
+        yes | sdkmanager --licenses 2>/dev/null || true
         
         # Build the APK skipping linting to speed up and avoid minor failures
         gradle clean assembleDebug -x lint --stacktrace

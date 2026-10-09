@@ -10,13 +10,13 @@ plugins {
 }
 
 android {
-  namespace = "com.aistudio.chefsync"
-  compileSdk = 35
+  namespace = "com.example"
+  compileSdk { version = release(36) { minorApiLevel = 1 } }
 
-    defaultConfig {
-        applicationId = "com.aistudio.chefsync"
-        minSdk = 24
-    targetSdk = 35
+  defaultConfig {
+    applicationId = "com.aistudio.chefsync.xvqp"
+    minSdk = 24
+    targetSdk = 36
     versionCode = 1
     versionName = "1.0"
 
@@ -32,13 +32,10 @@ android {
       keyPassword = System.getenv("KEY_PASSWORD")
     }
     create("debugConfig") {
-      val keystoreFile = file("${rootDir}/debug.keystore")
-      if (keystoreFile.exists()) {
-        storeFile = keystoreFile
-        storePassword = "android"
-        keyAlias = "androiddebugkey"
-        keyPassword = "android"
-      }
+      storeFile = file("${rootDir}/debug.keystore")
+      storePassword = "android"
+      keyAlias = "androiddebugkey"
+      keyPassword = "android"
     }
   }
 
@@ -49,12 +46,7 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       signingConfig = signingConfigs.getByName("release")
     }
-    debug { 
-      val keystoreFile = file("${rootDir}/debug.keystore")
-      if (keystoreFile.exists()) {
-        signingConfig = signingConfigs.getByName("debugConfig")
-      }
-    }
+    debug { signingConfig = signingConfigs.getByName("debugConfig") }
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11

@@ -1,4 +1,4 @@
-package com.aistudio.chefsync
+package com.example
 
 import android.Manifest
 import android.content.Intent
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,14 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.aistudio.chefsync.data.local.Product
-import com.aistudio.chefsync.data.local.SyncLog
-import com.aistudio.chefsync.data.repository.CloudSyncRepository
-import com.aistudio.chefsync.data.repository.ProductRepository
-import com.aistudio.chefsync.service.VoiceCommandService
-import com.aistudio.chefsync.ui.AuthScreen
-import com.aistudio.chefsync.ui.InventoryViewModel
-import com.aistudio.chefsync.ui.theme.ChefSyncTheme
+import com.example.data.local.Product
+import com.example.data.local.SyncLog
+import com.example.data.repository.CloudSyncRepository
+import com.example.data.repository.ProductRepository
+import com.example.service.VoiceCommandService
+import com.example.ui.AuthScreen
+import com.example.ui.InventoryViewModel
+import com.example.ui.theme.ChefSyncTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 
@@ -76,6 +77,7 @@ fun MainScreen() {
     val repository = remember { ProductRepository(app.database.productDao(), app.database.wasteDao(), app.database.syncLogDao()) }
     val cloudRepository = remember { CloudSyncRepository(context) }
     val viewModel: InventoryViewModel = viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
         override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T { return InventoryViewModel(repository, cloudRepository) as T }
     })
     val products by viewModel.products.collectAsStateWithLifecycle()
@@ -95,7 +97,7 @@ fun MainScreen() {
         topBar = {
             TopAppBar(title = { Text("ChefSync") }, actions = {
                 IconButton(onClick = { if (inputId.isNotEmpty()) viewModel.updateSpreadsheetId(inputId) }) { Icon(Icons.Default.CloudUpload, null) }
-                IconButton(onClick = { FirebaseAuth.getInstance().signOut() }) { Icon(Icons.Default.Logout, null) }
+                IconButton(onClick = { FirebaseAuth.getInstance().signOut() }) { Icon(Icons.AutoMirrored.Filled.Logout, null) }
             })
         },
         floatingActionButton = {

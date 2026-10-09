@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.data.remote
+package com.example.data.remote
 
 import kotlinx.serialization.Serializable
 import okhttp3.ResponseBody

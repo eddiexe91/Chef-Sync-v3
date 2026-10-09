@@ -1,4 +1,4 @@
-package com.aistudio.chefsync.data.remote
+package com.example.data.remote
 
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
