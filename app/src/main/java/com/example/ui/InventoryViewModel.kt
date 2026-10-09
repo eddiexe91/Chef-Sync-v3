@@ -7,6 +7,8 @@ import com.example.data.local.SyncLog
 import com.example.data.local.Waste
 import com.example.data.repository.CloudSyncRepository
 import com.example.data.repository.ProductRepository
+import com.example.data.repository.SheetColumnMapping
+import com.example.data.repository.SheetPreviewData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,11 +40,64 @@ class InventoryViewModel(
     private val _syncState = MutableStateFlow<SyncUiState>(SyncUiState.Idle)
     val syncState: StateFlow<SyncUiState> = _syncState.asStateFlow()
 
+    private val _sheetPreview = MutableStateFlow<SheetPreviewData?>(null)
+    val sheetPreview: StateFlow<SheetPreviewData?> = _sheetPreview.asStateFlow()
+
+    private val _isPreviewLoading = MutableStateFlow(false)
+    val isPreviewLoading: StateFlow<Boolean> = _isPreviewLoading.asStateFlow()
+
     fun updateSpreadsheetId(newId: String) {
         viewModelScope.launch {
             cloudRepository.updateSpreadsheetId(newId)
             syncWithGoogleSheets(newId)
         }
+    }
+
+    fun requestSheetPreview(idOrUrl: String, gid: String? = null) {
+        if (idOrUrl.isBlank()) {
+            _syncState.value = SyncUiState.Error("Ingresa la ID o URL de tu Google Sheet")
+            return
+        }
+
+        viewModelScope.launch {
+            _isPreviewLoading.value = true
+            _syncState.value = SyncUiState.Syncing
+            val result = repository.fetchSheetPreview(idOrUrl, gid)
+            _isPreviewLoading.value = false
+
+            result.fold(
+                onSuccess = { preview ->
+                    _sheetPreview.value = preview
+                    _syncState.value = SyncUiState.Idle
+                },
+                onFailure = { error ->
+                    _syncState.value = SyncUiState.Error(error.message ?: "No se pudo previsualizar la hoja")
+                }
+            )
+        }
+    }
+
+    fun applyColumnMappingAndImport(mapping: SheetColumnMapping) {
+        viewModelScope.launch {
+            _syncState.value = SyncUiState.Syncing
+            val result = repository.importSheetWithMapping(mapping)
+            _sheetPreview.value = null // Close mapping wizard
+
+            result.fold(
+                onSuccess = { count ->
+                    _syncState.value = SyncUiState.Success("¡Éxito! $count insumos importados con tu estructura personalizada.")
+                    cloudRepository.updateSpreadsheetId(mapping.spreadsheetId)
+                    cloudRepository.addLog("SYNC_CUSTOM", "OK", "$count insumos importados de gid=${mapping.gid}")
+                },
+                onFailure = { error ->
+                    _syncState.value = SyncUiState.Error(error.message ?: "Error al importar con el formato indicado")
+                }
+            )
+        }
+    }
+
+    fun dismissSheetPreview() {
+        _sheetPreview.value = null
     }
 
     fun syncWithGoogleSheets(idOrUrl: String) {

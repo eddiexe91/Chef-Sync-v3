@@ -258,60 +258,58 @@ private fun StepVoiceCommands() {
 private fun StepGoogleSheets() {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "📊 Cómo conectar tu Google Sheet",
+            text = "📊 Cómo conectar cualquier Google Sheet",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "ChefSync puede leer tu inventario directamente desde una hoja de cálculo de Google.",
+            text = "ChefSync es 100% flexible: no necesitas cambiar tu formato ni crear una hoja nueva. Puedes adaptar tus columnas y elegir qué pestaña sincronizar.",
             style = MaterialTheme.typography.bodyMedium
         )
 
         Spacer(modifier = Modifier.height(12.dp))
         Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             shape = RoundedCornerShape(12.dp)
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Text(
-                    text = "1. ¿Dónde encuentro la ID de la hoja?",
+                    text = "✨ Mapeador Inteligente de Columnas",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Abre tu Google Sheet en el navegador y copia el código que aparece en el enlace:\nhttps://docs.google.com/spreadsheets/d/\n👉 1BxiMVs0XRA5nFMdKvBdBZj_A... 👈/edit",
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary
+                    text = "Al pulsar en 'Mapear Columnas', verás las filas reales de tu documento y podrás elegir con un toque qué columna representa el Insumo, la Cantidad, la Unidad y el Stock Mínimo.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
             shape = RoundedCornerShape(12.dp)
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Text(
-                    text = "2. Estructura de Columnas recomendada:",
+                    text = "📑 Pestañas específicas (gid):",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Fila 1 (Cabecera): ID | Producto | Cantidad | Unidad | Stock Mínimo\n" +
-                            "Fila 2: 1 | Tomates | 20.0 | kg | 5.0\n" +
-                            "Fila 3: 2 | Leche | 10.0 | L | 3.0",
-                    fontFamily = FontFamily.Monospace,
-                    fontSize = 12.sp
+                    text = "Si tu archivo tiene varias pestañas (ej. 'Cocina', 'Bar', 'Cámara de frío'), simplemente abre esa pestaña en Google Sheets y pega el enlace completo (contiene #gid=XXXXX). ChefSync detectará y leerá esa pestaña exacta.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
             shape = RoundedCornerShape(12.dp)
@@ -320,7 +318,7 @@ private fun StepGoogleSheets() {
                 Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onSecondaryContainer)
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "Importante: En tu hoja de cálculo, pulsa en Compartir y selecciona 'Cualquier persona con el enlace puede ver'.",
+                    text = "Permiso en Google Drive: En tu hoja, pulsa en Compartir y selecciona 'Cualquier persona con el enlace puede ver'.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )

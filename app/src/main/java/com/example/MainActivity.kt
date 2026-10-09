@@ -46,6 +46,7 @@ import com.example.ui.AuthScreen
 import com.example.ui.ChefSyncTutorialDialog
 import com.example.ui.InventoryViewModel
 import com.example.ui.ManualWasteDialog
+import com.example.ui.SheetMappingDialog
 import com.example.ui.SyncUiState
 import com.example.ui.theme.ChefSyncTheme
 import com.google.firebase.FirebaseApp
@@ -102,6 +103,8 @@ fun MainScreen() {
     val logs by viewModel.localLogs.collectAsStateWithLifecycle()
     val cloudId by viewModel.spreadsheetId.collectAsStateWithLifecycle()
     val syncState by viewModel.syncState.collectAsStateWithLifecycle()
+    val sheetPreview by viewModel.sheetPreview.collectAsStateWithLifecycle()
+    val isPreviewLoading by viewModel.isPreviewLoading.collectAsStateWithLifecycle()
 
     var inputId by remember { mutableStateOf("") }
     LaunchedEffect(cloudId) { if (cloudId != null && inputId.isEmpty()) inputId = cloudId!! }
@@ -189,41 +192,87 @@ fun MainScreen() {
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text(
-                        text = "Vincular Google Sheet",
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
+                Column(modifier = Modifier.padding(14.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        OutlinedTextField(
-                            value = inputId,
-                            onValueChange = { inputId = it },
-                            placeholder = { Text("ID o URL de la hoja", fontSize = 13.sp) },
-                            singleLine = true,
-                            modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(10.dp)
+                        Text(
+                            text = "📊 Vincular Google Sheet",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Soporta cualquier formato y pestaña",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 11.sp
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = "Pega el enlace de tu hoja (ej. .../edit#gid=0) o pulsa 'Mapear' para señalar qué columnas procesar:",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = inputId,
+                        onValueChange = { inputId = it },
+                        placeholder = { Text("Pega enlace o ID de Google Sheets", fontSize = 13.sp) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Open Column Mapping Assistant
                         Button(
+                            onClick = {
+                                if (inputId.isNotBlank()) {
+                                    viewModel.requestSheetPreview(inputId)
+                                } else {
+                                    Toast.makeText(context, "Ingresa primero el enlace o ID de tu hoja", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            enabled = !isPreviewLoading,
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            if (isPreviewLoading) {
+                                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Analizando...", fontSize = 13.sp)
+                            } else {
+                                Icon(Icons.Default.Tune, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Mapear Columnas", fontSize = 13.sp)
+                            }
+                        }
+
+                        // Quick Sync Button
+                        OutlinedButton(
                             onClick = {
                                 if (inputId.isNotBlank()) {
                                     viewModel.updateSpreadsheetId(inputId)
                                 } else {
-                                    Toast.makeText(context, "Ingresa una ID válida", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Ingresa primero el enlace o ID", Toast.LENGTH_SHORT).show()
                                 }
                             },
                             enabled = syncState !is SyncUiState.Syncing,
                             shape = RoundedCornerShape(10.dp)
                         ) {
                             if (syncState is SyncUiState.Syncing) {
-                                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
                             } else {
-                                Icon(Icons.Default.Sync, contentDescription = "Sincronizar")
+                                Icon(Icons.Default.Sync, contentDescription = "Sincronizar", modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text("Sincronizar", fontSize = 13.sp)
                             }
                         }
                     }
@@ -351,6 +400,18 @@ fun MainScreen() {
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text("Cargar Inventario de Prueba")
                             }
+                            if (inputId.isNotBlank()) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                OutlinedButton(
+                                    onClick = { viewModel.requestSheetPreview(inputId) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(12.dp)
+                                ) {
+                                    Icon(Icons.Default.Tune, contentDescription = null)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text("Mapear Columnas de mi Hoja")
+                                }
+                            }
                             Spacer(modifier = Modifier.height(8.dp))
                             OutlinedButton(
                                 onClick = { showTutorial = true },
@@ -415,6 +476,16 @@ fun MainScreen() {
             onLoadDemoData = {
                 viewModel.seedDemoData()
             }
+        )
+    }
+
+    // Column Mapping Assistant Dialog
+    sheetPreview?.let { preview ->
+        SheetMappingDialog(
+            previewData = preview,
+            onDismiss = { viewModel.dismissSheetPreview() },
+            onChangeGid = { newGid -> viewModel.requestSheetPreview(inputId, newGid) },
+            onConfirmMapping = { mapping -> viewModel.applyColumnMappingAndImport(mapping) }
         )
     }
 
