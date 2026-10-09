@@ -47,13 +47,16 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
                 onGoogleSignInClicked(context, onAuthSuccess = { isLoading = false; onAuthSuccess() }, onAuthError = { isLoading = false; errorMsg = it }, scope = scope)
             }) { Text("Iniciar sesión con Google") }
         }
-        errorMsg?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+        if (!errorMsg.isNullOrBlank()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(errorMsg!!, color = MaterialTheme.colorScheme.error, textAlign = TextAlign.Center)
+        }
     }
 }
 
 fun onGoogleSignInClicked(context: Context, onAuthSuccess: () -> Unit, onAuthError: (String) -> Unit, scope: CoroutineScope) {
     val credentialManager = CredentialManager.create(context)
-    val clientId = try { context.getString(R.string.default_web_client_id) } catch (e: Exception) { onAuthError("Config missing"); return }
+    val clientId = try { context.getString(R.string.default_web_client_id) } catch (e: Exception) { onAuthError("Configuración no disponible"); return }
     val signInOption = GetSignInWithGoogleOption.Builder(serverClientId = clientId).build()
     val request = GetCredentialRequest.Builder().addCredentialOption(signInOption).build()
     scope.launch {
@@ -65,7 +68,15 @@ fun onGoogleSignInClicked(context: Context, onAuthSuccess: () -> Unit, onAuthErr
                 val authCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
                 FirebaseAuth.getInstance().signInWithCredential(authCredential).await()
                 onAuthSuccess()
+            } else {
+                onAuthError("Credencial no reconocida")
             }
-        } catch (e: Exception) { onAuthError(e.message ?: "Error") }
+        } catch (e: GetCredentialCancellationException) {
+            // Usuario canceló la selección, no mostrar error
+            onAuthError("")
+        } catch (e: Exception) {
+            Log.e("AuthScreen", "Sign in error", e)
+            onAuthError(e.localizedMessage ?: "Error de autenticación")
+        }
     }
 }
